@@ -1,0 +1,10 @@
+﻿  main.c
+  stb.c
+  camera.c
+  input.c
+  vector.c
+  vulkan.c
+  window.c
+  Generating Code...
+  imgui.cpp
+  strolb.vcxproj -> D:\Repos\strolb\bld\Debug\strolb.exe

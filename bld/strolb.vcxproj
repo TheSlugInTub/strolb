@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C47E080F-EC87-352D-94A1-2DA2C4035BE2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>strolb</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Repos\strolb\bld\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">strolb.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">strolb</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Repos\strolb\bld\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">strolb.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">strolb</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Repos\strolb\bld\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">strolb.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">strolb</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Repos\strolb\bld\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">strolb.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">strolb</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;BX_CONFIG_DEBUG=1;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;BX_CONFIG_DEBUG=1;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>D:\Repos\strolb\lib\glfw3.lib;D:\VulkanSDK\Lib\vulkan-1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Repos/strolb/bld/Debug/strolb.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Repos/strolb/bld/Debug/strolb.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>D:\Repos\strolb\lib\glfw3.lib;D:\VulkanSDK\Lib\vulkan-1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Repos/strolb/bld/Release/strolb.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Repos/strolb/bld/Release/strolb.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>D:\Repos\strolb\lib\glfw3.lib;D:\VulkanSDK\Lib\vulkan-1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Repos/strolb/bld/MinSizeRel/strolb.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Repos/strolb/bld/MinSizeRel/strolb.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BX_CONFIG_DEBUG=1;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\Repos\strolb\include;D:\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>D:\Repos\strolb\lib\glfw3.lib;D:\VulkanSDK\Lib\vulkan-1.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/Repos/strolb/bld/RelWithDebInfo/strolb.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Repos/strolb/bld/RelWithDebInfo/strolb.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Repos\strolb\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/Repos/strolb/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/Repos/strolb -BD:/Repos/strolb/bld --check-stamp-file D:/Repos/strolb/bld/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCXXInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCommonLanguageInclude.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeGenericSystem.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeInitializeConfigs.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeLanguageInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeRCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInitialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCXXLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCommonLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-Initialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\WindowsPaths.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCXXCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeRCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Repos\strolb\bld\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/Repos/strolb/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/Repos/strolb -BD:/Repos/strolb/bld --check-stamp-file D:/Repos/strolb/bld/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCXXInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCommonLanguageInclude.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeGenericSystem.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeInitializeConfigs.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeLanguageInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeRCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInitialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCXXLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCommonLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-Initialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\WindowsPaths.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCXXCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeRCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Repos\strolb\bld\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/Repos/strolb/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/Repos/strolb -BD:/Repos/strolb/bld --check-stamp-file D:/Repos/strolb/bld/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCXXInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCommonLanguageInclude.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeGenericSystem.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeInitializeConfigs.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeLanguageInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeRCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInitialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCXXLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCommonLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-Initialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\WindowsPaths.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCXXCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeRCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Repos\strolb\bld\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/Repos/strolb/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/Repos/strolb -BD:/Repos/strolb/bld --check-stamp-file D:/Repos/strolb/bld/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCXXInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeCommonLanguageInclude.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeGenericSystem.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeInitializeConfigs.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeLanguageInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeRCInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\CMakeSystemSpecificInitialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Compiler\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCXXLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Internal\CMakeCommonLinkerInformation.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Linker\MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Linker\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-Initialize.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-C.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows-MSVC.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\Windows.cmake;D:\Apps\cmake\share\cmake-4.0\Modules\Platform\WindowsPaths.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeCXXCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeRCCompiler.cmake;D:\Repos\strolb\bld\CMakeFiles\4.0.3\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Repos\strolb\bld\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D:\Repos\strolb\src\main.c" />
+    <ClCompile Include="D:\Repos\strolb\src\stb.c" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\camera.c" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\imgui.cpp" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\input.c" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\vector.c" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\vulkan.c" />
+    <ClCompile Include="D:\Repos\strolb\include\strolb\window.c" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="D:\Repos\strolb\bld\ZERO_CHECK.vcxproj">
+      <Project>{6BB683F9-FB9A-3D30-8891-5FB219ACB915}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

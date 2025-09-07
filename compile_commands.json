@@ -1,0 +1,13 @@
+﻿[
+  {
+    "directory": "D:/Repos/strolb/bld/",
+    "command": "\"D:/Apps/clang/bin/clang++.exe\" -x c \"D:/Repos/strolb/src/main.c\" -Wall -fms-compatibility-version=19.10 -Wmicrosoft -Wno-invalid-token-paste -Wno-unknown-pragmas -Wno-unused-value -fsyntax-only \"-D_MT\" \"-DWIN32\" \"-D_WINDOWS\" \"-DBX_CONFIG_DEBUG=1\" \"-DCMAKE_INTDIR=/\"Debug/\"\" \"-D_DEBUG_FUNCTIONAL_MACHINERY\" -isystem\"D:/Apps/Visual Studio/VC/include\" -isystem\"D:/Apps/Visual Studio/VC/atlmfc/include\" -isystem\"D:/Apps/Visual Studio/VC/Auxiliary/VS/include\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/cppwinrt\" -I\"D:/Repos/strolb/include\" -I\"D:/VulkanSDK/Include\"",
+    "file": "D:/Repos/strolb/src/main.c"
+  }
+  ,
+  {
+    "directory": "D:/Repos/strolb/bld/",
+    "command": "\"D:/Apps/clang/bin/clang++.exe\" -x c \"D:/Repos/strolb/include/strolb/window.c\" -Wall -fms-compatibility-version=19.10 -Wmicrosoft -Wno-invalid-token-paste -Wno-unknown-pragmas -Wno-unused-value -fsyntax-only \"-D_MT\" \"-DWIN32\" \"-D_WINDOWS\" \"-DBX_CONFIG_DEBUG=1\" \"-DCMAKE_INTDIR=/\"Debug/\"\" \"-D_DEBUG_FUNCTIONAL_MACHINERY\" -isystem\"D:/Apps/Visual Studio/VC/include\" -isystem\"D:/Apps/Visual Studio/VC/atlmfc/include\" -isystem\"D:/Apps/Visual Studio/VC/Auxiliary/VS/include\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt\" -isystem\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/cppwinrt\" -I\"D:/Repos/strolb/include\" -I\"D:/VulkanSDK/Include\"",
+    "file": "D:/Repos/strolb/include/strolb/window.c"
+  }
+]

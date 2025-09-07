@@ -1,0 +1,8 @@
+D:\Repos\strolb\src\main.c;D:\Repos\strolb\bld\strolb.dir\Release\main.obj
+D:\Repos\strolb\src\stb.c;D:\Repos\strolb\bld\strolb.dir\Release\stb.obj
+D:\Repos\strolb\include\strolb\camera.c;D:\Repos\strolb\bld\strolb.dir\Release\camera.obj
+D:\Repos\strolb\include\strolb\imgui.cpp;D:\Repos\strolb\bld\strolb.dir\Release\imgui.obj
+D:\Repos\strolb\include\strolb\input.c;D:\Repos\strolb\bld\strolb.dir\Release\input.obj
+D:\Repos\strolb\include\strolb\vector.c;D:\Repos\strolb\bld\strolb.dir\Release\vector.obj
+D:\Repos\strolb\include\strolb\vulkan.c;D:\Repos\strolb\bld\strolb.dir\Release\vulkan.obj
+D:\Repos\strolb\include\strolb\window.c;D:\Repos\strolb\bld\strolb.dir\Release\window.obj

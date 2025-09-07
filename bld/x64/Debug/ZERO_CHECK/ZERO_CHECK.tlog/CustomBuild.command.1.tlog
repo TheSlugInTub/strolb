@@ -1,0 +1,10 @@
+^D:\REPOS\STROLB\BLD\CMAKEFILES\491FFF4DF247C2B062C524A67BA59004\GENERATE.STAMP.RULE
+setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/Repos/strolb -BD:/Repos/strolb/bld --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Repos/strolb/bld/strolb.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
