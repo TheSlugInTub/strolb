@@ -44,7 +44,10 @@ add_executable(${PROJECT_NAME}
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/glfw3.lib
+        ${CMAKE_SOURCE_DIR}/lib/freetype.lib
         D:/VulkanSDK/Lib/vulkan-1.lib
+        msvcrt.lib
+        msvcmrt.lib
     )
 endif()
 

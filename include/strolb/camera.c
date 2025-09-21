@@ -85,8 +85,8 @@ void slb_Camera_CursorToWorld(slb_Camera* camera, int cursorX,
     // Screen space: (0,0) top-left to (width,height) bottom-right
     // NDC space: (-1,-1) bottom-left to (1,1) top-right
     float ndc_x = (2.0f * cursorX) / screenWidth - 1.0f;
-    float ndc_y = 1.0f - (2.0f * cursorY) / screenHeight; // Flip Y
-    
+    float ndc_y = (2.0f * cursorY) / screenHeight - 1.0f;
+
     // Step 2: Create ray in clip space (NDC with depth)
     // We use two points: near plane (z=-1) and far plane (z=1)
     vec4 ray_clip_near = {ndc_x, ndc_y, -1.0f, 1.0f};

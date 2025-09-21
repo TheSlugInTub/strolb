@@ -27,6 +27,7 @@ void slb_ImGui_Terminate();
 void slb_ImGui_Theme1();
 
 bool slb_ImGui_Begin(const char* name);
+bool slb_ImGui_BeginFlag(const char* name, bool* open);
 void slb_ImGui_End();
 
 void slb_ImGui_DebugWindow();
@@ -82,6 +83,15 @@ int            slb_ImGuiPayload_GetDataSize(slb_ImGuiPayload payload);
 
 bool slb_ImGui_BeginPopupContextWindow();
 void slb_ImGui_EndPopup();
+
+bool slb_ImGui_BeginMainMenuBar();
+bool slb_ImGui_BeginMenu(const char* name);
+bool slb_ImGui_MenuItemShortcut(const char* name, 
+        const char* shortcut);
+void slb_ImGui_EndMenu();
+void slb_ImGui_EndMainMenuBar();
+
+bool slb_ImGui_IsHovering();
 
 #ifdef __cplusplus
 }

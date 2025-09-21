@@ -1,0 +1,44 @@
+[
+    {
+        "connections": [
+            2
+        ],
+        "event": "",
+        "position": [
+            0.08052150160074234,
+            1.1270376443862915
+        ],
+        "text": "I've been away for a while and hope you didn't do anything while i was gone\nHey there\nHow ya doin\n"
+    },
+    {
+        "connections": [
+            3
+        ],
+        "event": "",
+        "position": [
+            -6.517588138580322,
+            -3.778468608856201
+        ],
+        "text": "I never meant to be rude"
+    },
+    {
+        "connections": [
+            4
+        ],
+        "event": "",
+        "position": [
+            -2.012512683868408,
+            -5.955449104309082
+        ],
+        "text": "Honestly I never meant to"
+    },
+    {
+        "connections": [],
+        "event": "",
+        "position": [
+            5.262075901031494,
+            -5.289760589599609
+        ],
+        "text": "But it never meant anything to me,\nanyways!!"
+    }
+]

@@ -37,6 +37,17 @@ bool slb_Input_GetMouseButtonDown(slb_Window* window, slb_Key mouseKey)
     return keyState[mouseKey] && !prevKeyState[mouseKey];
 }
 
+bool slb_Input_GetMouseButtonUp(slb_Window* window, slb_Key mouseKey)
+{
+    bool result =
+        glfwGetMouseButton(window->window, mouseKey) != GLFW_PRESS &&
+        prevKeyState[mouseKey];
+    prevKeyState[mouseKey] = keyState[mouseKey];
+    keyState[mouseKey] =
+        glfwGetMouseButton(window->window, mouseKey) == GLFW_PRESS;
+    return result;
+}
+
 bool slb_Input_GetMouseButton(slb_Window* window, slb_Key mouseKey)
 {
     return glfwGetMouseButton(window->window, mouseKey) ==

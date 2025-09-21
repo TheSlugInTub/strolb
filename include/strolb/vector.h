@@ -32,3 +32,8 @@ void slb_Vector_Free(slb_Vector* vector);
 
 // Set the size to zero, the memory remains allocated for future use
 void slb_Vector_Clear(slb_Vector* vector);
+
+void slb_Vector_Erase(slb_Vector* vector, int index);
+
+int slb_Vector_Insert(slb_Vector* vector, size_t index,
+                      const void* element);

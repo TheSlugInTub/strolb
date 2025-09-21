@@ -151,6 +151,7 @@ bool slb_Input_GetKey(slb_Window* window, slb_Key key);
 // Much like the key functions but with mouse input
 
 bool slb_Input_GetMouseButtonDown(slb_Window* window, slb_Key mouseKey);
+bool slb_Input_GetMouseButtonUp(slb_Window* window, slb_Key mouseKey);
 bool slb_Input_GetMouseButton(slb_Window* window, slb_Key mouseKey);
 
 // These functions get the screen-space position of the mouse

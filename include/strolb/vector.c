@@ -2,7 +2,8 @@
 #include <assert.h>
 
 // Initialize a new vector with specified element size
-slb_Vector* slb_Vector_Create(size_t elemSize, size_t initial_capacity)
+slb_Vector* slb_Vector_Create(size_t elemSize,
+                              size_t initial_capacity)
 {
     slb_Vector* vector = (slb_Vector*)malloc(sizeof(slb_Vector));
     if (vector == NULL)
@@ -150,4 +151,74 @@ void slb_Vector_Free(slb_Vector* vector)
 void slb_Vector_Clear(slb_Vector* vector)
 {
     vector->size = 0;
+}
+
+void slb_Vector_Erase(slb_Vector* vector, int index)
+{
+    if (index < 0 || index >= vector->size)
+        return;
+
+    // Shift elements down
+    for (int i = index; i < vector->size - 1; i++)
+    {
+        memcpy(slb_Vector_Get(vector, i),
+               slb_Vector_Get(vector, i + 1), vector->elemSize);
+    }
+    vector->size--;
+}
+
+int slb_Vector_Insert(slb_Vector* vector, size_t index,
+                      const void* element)
+{
+    if (vector == NULL)
+    {
+        fprintf(stderr, "Vector is NULL.\n");
+        assert(1);
+        return -1;
+    }
+
+    if (index > vector->size)
+    {
+        fprintf(stderr, "Index out of bounds for insertion.\n");
+        assert(1);
+        return -1;
+    }
+
+    // Resize if needed
+    if (vector->size >= vector->capacity)
+    {
+        size_t new_capacity = vector->capacity * 2;
+        void*  new_data =
+            realloc(vector->data, new_capacity * vector->elemSize);
+        if (new_data == NULL)
+        {
+            fprintf(stderr, "Failed to reallocate memory for vector "
+                            "insertion.\n");
+            assert(1);
+            return -1;
+        }
+
+        vector->data = new_data;
+        vector->capacity = new_capacity;
+    }
+
+    // Calculate position to insert
+    char* pos_to_insert =
+        (char*)vector->data + (index * vector->elemSize);
+
+    // Calculate number of bytes to move (shift elements after index)
+    size_t bytes_to_move = (vector->size - index) * vector->elemSize;
+
+    // Shift elements to the right if needed
+    if (bytes_to_move > 0)
+    {
+        char* move_dest = pos_to_insert + vector->elemSize;
+        memmove(move_dest, pos_to_insert, bytes_to_move);
+    }
+
+    // Copy the new element into the position
+    memcpy(pos_to_insert, element, vector->elemSize);
+
+    vector->size++;
+    return 0;
 }

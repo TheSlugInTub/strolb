@@ -1,9 +1,9 @@
 #include <strolb/vulkan.h>
 
-slb_Buffer slb_Buffer_Create(uint32_t size, VkBufferUsageFlags usage, 
-        VkMemoryPropertyFlags properties, 
-        slb_PhysicalDevice physicalDevice,
-        slb_Device* device)
+slb_Buffer slb_Buffer_Create(uint32_t size, VkBufferUsageFlags usage,
+                             VkMemoryPropertyFlags properties,
+                             slb_PhysicalDevice    physicalDevice,
+                             slb_Device*           device)
 {
     slb_Buffer buffer;
 
@@ -13,34 +13,38 @@ slb_Buffer slb_Buffer_Create(uint32_t size, VkBufferUsageFlags usage,
     bufferInfo.usage = usage;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    if (vkCreateBuffer(device->device, &bufferInfo, NULL, 
-                &buffer.buffer) != VK_SUCCESS) 
+    if (vkCreateBuffer(device->device, &bufferInfo, NULL,
+                       &buffer.buffer) != VK_SUCCESS)
     {
         slb_Error("Failed to create buffer", slb_ErrorType_Error);
     }
 
     VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements(device->device, buffer.buffer, &memRequirements);
+    vkGetBufferMemoryRequirements(device->device, buffer.buffer,
+                                  &memRequirements);
 
     VkMemoryAllocateInfo allocInfo = {0};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = slb_FindMemoryType(physicalDevice, 
-        memRequirements.memoryTypeBits, properties);
+    allocInfo.memoryTypeIndex = slb_FindMemoryType(
+        physicalDevice, memRequirements.memoryTypeBits, properties);
 
-    if (vkAllocateMemory(device->device, &allocInfo, NULL, 
-                &buffer.memory) != VK_SUCCESS) 
+    if (vkAllocateMemory(device->device, &allocInfo, NULL,
+                         &buffer.memory) != VK_SUCCESS)
     {
-        slb_Error("Failed to allocate buffer memory", slb_ErrorType_Error);
+        slb_Error("Failed to allocate buffer memory",
+                  slb_ErrorType_Error);
     }
 
-    vkBindBufferMemory(device->device, buffer.buffer, buffer.memory, 0);
+    vkBindBufferMemory(device->device, buffer.buffer, buffer.memory,
+                       0);
 
     return buffer;
 }
 
-void slb_CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size, 
-        slb_Device* device, slb_CommandPool* commandPool)
+void slb_CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer,
+                    VkDeviceSize size, slb_Device* device,
+                    slb_CommandPool* commandPool)
 {
     VkCommandBufferAllocateInfo allocInfo = {0};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -49,7 +53,8 @@ void slb_CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size,
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device->device, &allocInfo, &commandBuffer);
+    vkAllocateCommandBuffers(device->device, &allocInfo,
+                             &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo = {0};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -59,7 +64,8 @@ void slb_CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size,
 
     VkBufferCopy copyRegion = {0};
     copyRegion.size = size;
-    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1,
+                    &copyRegion);
 
     vkEndCommandBuffer(commandBuffer);
 
@@ -68,10 +74,12 @@ void slb_CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size,
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
 
-    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo,
+                  VK_NULL_HANDLE);
     vkQueueWaitIdle(device->graphicsQueue);
 
-    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1,
+                         &commandBuffer);
 }
 
 static const char* validationLayers[] = {
@@ -151,9 +159,11 @@ slb_Instance slb_Instance_Create(const char* icationName)
 {
     slb_Instance instance;
 
-    if (SLB_USE_VALIDATION_LAYERS && !slb_CheckValidationLayerSupport())
+    if (SLB_USE_VALIDATION_LAYERS &&
+        !slb_CheckValidationLayerSupport())
     {
-        slb_Error("Validation layers requested but not available", slb_ErrorType_Warning);
+        slb_Error("Validation layers requested but not available",
+                  slb_ErrorType_Warning);
     }
 
     // Send information about our ication to the Vulkan API
@@ -169,7 +179,7 @@ slb_Instance slb_Instance_Create(const char* icationName)
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = &info;
 
-    uint32_t          glfwExtensionCount = 0;
+    uint32_t     glfwExtensionCount = 0;
     const char** glfwExtensions;
 
     // Get required vulkan extensions from GLFW
@@ -177,7 +187,7 @@ slb_Instance slb_Instance_Create(const char* icationName)
         glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     // Create extensions array with space for other extensions
-    uint32_t          extensionCount = glfwExtensionCount;
+    uint32_t     extensionCount = glfwExtensionCount;
     const char** extensions = (const char**)malloc(
         (glfwExtensionCount + 1) * sizeof(const char*));
 
@@ -213,10 +223,10 @@ slb_Instance slb_Instance_Create(const char* icationName)
     }
 
     // Create the instance
-    if (vkCreateInstance(&createInfo, NULL, &instance) !=
-        VK_SUCCESS)
+    if (vkCreateInstance(&createInfo, NULL, &instance) != VK_SUCCESS)
     {
-        slb_Error("Failed to create Vulkan instance", slb_ErrorType_Error);
+        slb_Error("Failed to create Vulkan instance",
+                  slb_ErrorType_Error);
     }
 
     free(extensions);
@@ -224,15 +234,16 @@ slb_Instance slb_Instance_Create(const char* icationName)
     return instance;
 }
 
-slb_Surface slb_Surface_Create(slb_Instance instance, slb_Window* window)
+slb_Surface slb_Surface_Create(slb_Instance instance,
+                               slb_Window*  window)
 {
     slb_Surface surface;
-    
-    if (glfwCreateWindowSurface(instance, window->window,
-                                NULL,
+
+    if (glfwCreateWindowSurface(instance, window->window, NULL,
                                 &surface) != VK_SUCCESS)
     {
-        slb_Error("Failed to create window surface", slb_ErrorType_Error);
+        slb_Error("Failed to create window surface",
+                  slb_ErrorType_Error);
     }
 
     return surface;
@@ -266,20 +277,23 @@ slb_DebugMessenger slb_DebugMessenger_Create(slb_Instance instance)
     {
         VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo =
             {0};
-        slb_PopulateDebugMessengerCreateInfo(&debugMessengerCreateInfo);
+        slb_PopulateDebugMessengerCreateInfo(
+            &debugMessengerCreateInfo);
 
         if (slb_CreateDebugUtilsMessengerEXT(
                 instance, &debugMessengerCreateInfo, NULL,
                 &messenger) != VK_SUCCESS)
         {
-            slb_Error("Failed to set up debug messenger", slb_ErrorType_Warning);
+            slb_Error("Failed to set up debug messenger",
+                      slb_ErrorType_Warning);
         }
     }
 
     return messenger;
 }
 
-slb_QueueFamilyIndices slb_FindQueueFamilies(slb_PhysicalDevice device, slb_Surface surface)
+slb_QueueFamilyIndices
+slb_FindQueueFamilies(slb_PhysicalDevice device, slb_Surface surface)
 {
     slb_QueueFamilyIndices indices = {0};
 
@@ -300,7 +314,8 @@ slb_QueueFamilyIndices slb_FindQueueFamilies(slb_PhysicalDevice device, slb_Surf
     for (int i = 0; i < queueFamilies->size; i++)
     {
         VkQueueFamilyProperties* prop =
-            (VkQueueFamilyProperties*)slb_Vector_Get(queueFamilies, i);
+            (VkQueueFamilyProperties*)slb_Vector_Get(queueFamilies,
+                                                     i);
 
         VkBool32 presentSupport = false;
         vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface,
@@ -357,23 +372,23 @@ bool slb_CheckExtensionsSupported(slb_PhysicalDevice device)
     return true;
 }
 
-bool slb_IsDeviceSuitable(slb_PhysicalDevice device, slb_Surface surface)
+bool slb_IsDeviceSuitable(slb_PhysicalDevice device,
+                          slb_Surface        surface)
 {
     slb_QueueFamilyIndices indices =
         slb_FindQueueFamilies(device, surface);
-    return indices.isValid &&
-           slb_CheckExtensionsSupported(device);
+    return indices.isValid && slb_CheckExtensionsSupported(device);
 }
 
-slb_PhysicalDevice slb_PhysicalDevice_Create(slb_Instance instance, slb_Surface surface)
+slb_PhysicalDevice slb_PhysicalDevice_Create(slb_Instance instance,
+                                             slb_Surface  surface)
 {
     slb_PhysicalDevice physicalDevice;
 
     uint32_t deviceCount = 0;
 
     // First call: get the number of devices
-    vkEnumeratePhysicalDevices(instance, &deviceCount,
-                               NULL);
+    vkEnumeratePhysicalDevices(instance, &deviceCount, NULL);
 
     if (deviceCount == 0)
     {
@@ -408,26 +423,28 @@ slb_PhysicalDevice slb_PhysicalDevice_Create(slb_Instance instance, slb_Surface 
 
     if (physicalDevice == VK_NULL_HANDLE)
     {
-        slb_Error("Failed to find a suitable physical device", slb_ErrorType_Error);
+        slb_Error("Failed to find a suitable physical device",
+                  slb_ErrorType_Error);
     }
 
     return physicalDevice;
 }
 
-slb_Device slb_Device_Create(slb_Instance instance, slb_PhysicalDevice physicalDevice, 
-        slb_Surface surface)
+slb_Device slb_Device_Create(slb_Instance       instance,
+                             slb_PhysicalDevice physicalDevice,
+                             slb_Surface        surface)
 {
     slb_Device device;
 
-    slb_QueueFamilyIndices indices = slb_FindQueueFamilies(
-        physicalDevice, surface);
+    slb_QueueFamilyIndices indices =
+        slb_FindQueueFamilies(physicalDevice, surface);
 
     // Create queue create infos for unique queue families
     slb_Vector* queueCreateInfos =
         slb_Vector_Create(sizeof(VkDeviceQueueCreateInfo), 2);
 
     uint32_t uniqueQueueFamilies[2];
-    int uniqueCount = 0;
+    int      uniqueCount = 0;
 
     // Add graphics family
     uniqueQueueFamilies[uniqueCount++] = indices.graphicsFamily;
@@ -484,8 +501,8 @@ slb_Device slb_Device_Create(slb_Instance instance, slb_PhysicalDevice physicalD
         deviceCreateInfo.enabledLayerCount = 0;
     }
 
-    if (vkCreateDevice(physicalDevice, &deviceCreateInfo,
-                       NULL, &device.device) != VK_SUCCESS)
+    if (vkCreateDevice(physicalDevice, &deviceCreateInfo, NULL,
+                       &device.device) != VK_SUCCESS)
     {
         printf("SK ERROR: Failed to create logical device.");
     }
@@ -501,22 +518,22 @@ slb_Device slb_Device_Create(slb_Instance instance, slb_PhysicalDevice physicalD
     return device;
 }
 
-slb_SwapchainDetails slb_QuerySwapchainSupport(slb_PhysicalDevice physicalDevice, 
-        slb_Surface surface)
+slb_SwapchainDetails
+slb_QuerySwapchainSupport(slb_PhysicalDevice physicalDevice,
+                          slb_Surface        surface)
 {
     slb_SwapchainDetails details = {0};
 
-    details.formats = slb_Vector_Create(sizeof(VkSurfaceFormatKHR), 1);
+    details.formats =
+        slb_Vector_Create(sizeof(VkSurfaceFormatKHR), 1);
     details.presentModes =
         slb_Vector_Create(sizeof(VkPresentModeKHR), 1);
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-        physicalDevice, surface,
-        &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface,
+                                              &details.capabilities);
 
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice,
-                                         surface,
+    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface,
                                          &formatCount, NULL);
 
     if (formatCount != 0)
@@ -529,15 +546,13 @@ slb_SwapchainDetails slb_QuerySwapchainSupport(slb_PhysicalDevice physicalDevice
 
     uint32_t presentModeCount;
     vkGetPhysicalDeviceSurfacePresentModesKHR(
-        physicalDevice, surface,
-        &presentModeCount, NULL);
+        physicalDevice, surface, &presentModeCount, NULL);
 
     if (presentModeCount != 0)
     {
         slb_Vector_Resize(details.presentModes, presentModeCount);
         vkGetPhysicalDeviceSurfacePresentModesKHR(
-            physicalDevice, surface,
-            &presentModeCount,
+            physicalDevice, surface, &presentModeCount,
             (VkPresentModeKHR*)details.presentModes->data);
     }
 
@@ -553,7 +568,7 @@ slb_ChooseSwapSurfaceFormat(slb_Vector* availableFormats)
             (VkSurfaceFormatKHR*)slb_Vector_Get(availableFormats, i);
         VkSurfaceFormatKHR availableFormat = *formatPtr;
 
-        if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
+        if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM &&
             availableFormat.colorSpace ==
                 VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
         {
@@ -561,7 +576,8 @@ slb_ChooseSwapSurfaceFormat(slb_Vector* availableFormats)
         }
     }
 
-    return *((VkSurfaceFormatKHR*)slb_Vector_Get(availableFormats, 0));
+    return *(
+        (VkSurfaceFormatKHR*)slb_Vector_Get(availableFormats, 0));
 }
 
 VkPresentModeKHR
@@ -570,7 +586,8 @@ slb_ChooseSwapPresentMode(slb_Vector* availablePresentModes)
     for (int i = 0; i < availablePresentModes->size; i++)
     {
         VkPresentModeKHR* formatPtr =
-            (VkPresentModeKHR*)slb_Vector_Get(availablePresentModes, i);
+            (VkPresentModeKHR*)slb_Vector_Get(availablePresentModes,
+                                              i);
         VkPresentModeKHR availableMode = *formatPtr;
 
         if (availableMode == VK_PRESENT_MODE_IMMEDIATE_KHR)
@@ -596,8 +613,9 @@ uint32_t slb_ClampU32(uint32_t val, uint32_t low, uint32_t high)
     return val;
 }
 
-VkExtent2D slb_ChooseSwapExtent(VkSurfaceCapabilitiesKHR* capabilities,
-    slb_Window* window)
+VkExtent2D
+slb_ChooseSwapExtent(VkSurfaceCapabilitiesKHR* capabilities,
+                     slb_Window*               window)
 {
     if (capabilities->currentExtent.width != UINT32_MAX)
     {
@@ -608,7 +626,8 @@ VkExtent2D slb_ChooseSwapExtent(VkSurfaceCapabilitiesKHR* capabilities,
         int width, height;
         glfwGetFramebufferSize(window->window, &width, &height);
 
-        VkExtent2D actualExtent = {(uint32_t)(width), (uint32_t)(height)};
+        VkExtent2D actualExtent = {(uint32_t)(width),
+                                   (uint32_t)(height)};
         actualExtent.width = slb_ClampU32(
             actualExtent.width, capabilities->minImageExtent.width,
             capabilities->maxImageExtent.width);
@@ -620,12 +639,16 @@ VkExtent2D slb_ChooseSwapExtent(VkSurfaceCapabilitiesKHR* capabilities,
     }
 }
 
-slb_Swapchain slb_Swapchain_Create(slb_Window* window, slb_PhysicalDevice physicalDevice,
-        slb_Surface surface, slb_Device* device, slb_Image* depthImage)
+slb_Swapchain slb_Swapchain_Create(slb_Window*        window,
+                                   slb_PhysicalDevice physicalDevice,
+                                   slb_Surface        surface,
+                                   slb_Device*        device,
+                                   slb_Image*         depthImage)
 {
     slb_Swapchain swapchain;
 
-    slb_SwapchainDetails details = slb_QuerySwapchainSupport(physicalDevice, surface);
+    slb_SwapchainDetails details =
+        slb_QuerySwapchainSupport(physicalDevice, surface);
     VkSurfaceFormatKHR format =
         slb_ChooseSwapSurfaceFormat(details.formats);
     VkPresentModeKHR mode =
@@ -651,10 +674,10 @@ slb_Swapchain slb_Swapchain_Create(slb_Window* window, slb_PhysicalDevice physic
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    slb_QueueFamilyIndices indices = slb_FindQueueFamilies(
-        physicalDevice, surface);
+    slb_QueueFamilyIndices indices =
+        slb_FindQueueFamilies(physicalDevice, surface);
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily,
-                                indices.presentFamily};
+                                     indices.presentFamily};
 
     if (indices.graphicsFamily != indices.presentFamily)
     {
@@ -692,7 +715,7 @@ slb_Swapchain slb_Swapchain_Create(slb_Window* window, slb_PhysicalDevice physic
     vkGetSwapchainImagesKHR(
         device->device, swapchain.swapchain, &imageCount,
         (VkImage*)swapchain.swapchainImages->data);
-    
+
     swapchain.swapchainImageViews = slb_Vector_Create(
         sizeof(VkImageView), swapchain.swapchainImages->size);
 
@@ -700,13 +723,15 @@ slb_Swapchain slb_Swapchain_Create(slb_Window* window, slb_PhysicalDevice physic
 
     for (int i = 0; i < swapchain.swapchainImages->size; i++)
     {
-        slb_Vector_PushBack(swapchain.swapchainImageViews, &imageView);
+        slb_Vector_PushBack(swapchain.swapchainImageViews,
+                            &imageView);
 
         VkImage* swapchainImage =
             (VkImage*)slb_Vector_Get(swapchain.swapchainImages, i);
 
-        VkImageView* swapchainImageView = (VkImageView*)slb_Vector_Get(
-            swapchain.swapchainImageViews, i);
+        VkImageView* swapchainImageView =
+            (VkImageView*)slb_Vector_Get(
+                swapchain.swapchainImageViews, i);
 
         VkImageViewCreateInfo createInfo = {0};
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -729,16 +754,18 @@ slb_Swapchain slb_Swapchain_Create(slb_Window* window, slb_PhysicalDevice physic
         if (vkCreateImageView(device->device, &createInfo, NULL,
                               swapchainImageView) != VK_SUCCESS)
         {
-            slb_Error("Failed to create image views", slb_ErrorType_Error);
+            slb_Error("Failed to create image views",
+                      slb_ErrorType_Error);
         }
     }
 
     return swapchain;
 }
 
-void slb_Swapchain_CreateFramebuffers(slb_Swapchain* swapchain, slb_Device* device,
-        slb_RenderPass renderPass,
-        slb_Image* depthImage)
+void slb_Swapchain_CreateFramebuffers(slb_Swapchain* swapchain,
+                                      slb_Device*    device,
+                                      slb_RenderPass renderPass,
+                                      slb_Image*     depthImage)
 {
     swapchain->swapchainFramebuffers =
         slb_Vector_Create(sizeof(VkFramebuffer), 1);
@@ -765,14 +792,17 @@ void slb_Swapchain_CreateFramebuffers(slb_Swapchain* swapchain, slb_Device* devi
         if (vkCreateFramebuffer(device->device, &framebufferInfo,
                                 NULL, &framebuf) != VK_SUCCESS)
         {
-            slb_Error("Failed to create framebuffer", slb_ErrorType_Error);
+            slb_Error("Failed to create framebuffer",
+                      slb_ErrorType_Error);
         }
 
-        slb_Vector_PushBack(swapchain->swapchainFramebuffers, &framebuf);
+        slb_Vector_PushBack(swapchain->swapchainFramebuffers,
+                            &framebuf);
     }
 }
 
-slb_RenderPass slb_RenderPass_Create(slb_Swapchain* swapchain, slb_Device* device)
+slb_RenderPass slb_RenderPass_Create(slb_Swapchain* swapchain,
+                                     slb_Device*    device)
 {
     slb_RenderPass renderPass;
 
@@ -844,14 +874,17 @@ slb_RenderPass slb_RenderPass_Create(slb_Swapchain* swapchain, slb_Device* devic
     if (vkCreateRenderPass(device->device, &renderPassInfo, NULL,
                            &renderPass) != VK_SUCCESS)
     {
-        slb_Error("Failed to create render pass", slb_ErrorType_Error);
+        slb_Error("Failed to create render pass",
+                  slb_ErrorType_Error);
     }
 
     return renderPass;
 }
 
-slb_DescriptorSetLayout slb_DescriptorSetLayout_Create(VkDescriptorSetLayoutBinding* bindings,
-    uint16_t bindingCount, slb_Device* device)
+slb_DescriptorSetLayout
+slb_DescriptorSetLayout_Create(VkDescriptorSetLayoutBinding* bindings,
+                               uint16_t    bindingCount,
+                               slb_Device* device)
 {
     slb_DescriptorSetLayout layout;
 
@@ -861,11 +894,11 @@ slb_DescriptorSetLayout slb_DescriptorSetLayout_Create(VkDescriptorSetLayoutBind
     layoutInfo.bindingCount = bindingCount;
     layoutInfo.pBindings = bindings;
 
-    if (vkCreateDescriptorSetLayout(
-            device->device, &layoutInfo, NULL,
-            &layout) != VK_SUCCESS)
+    if (vkCreateDescriptorSetLayout(device->device, &layoutInfo, NULL,
+                                    &layout) != VK_SUCCESS)
     {
-        slb_Error("Failed to create descriptor set layout", slb_ErrorType_Error);
+        slb_Error("Failed to create descriptor set layout",
+                  slb_ErrorType_Error);
     }
 
     return layout;
@@ -891,7 +924,8 @@ char* skReadFile(const char* filePath, uint32_t* len)
     return shaderCode;
 }
 
-VkShaderModule slb_CreateShaderModule(slb_Device* device, char* buffer, uint32_t len)
+VkShaderModule slb_CreateShaderModule(slb_Device* device,
+                                      char* buffer, uint32_t len)
 {
     VkShaderModuleCreateInfo createInfo = {0};
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -915,19 +949,20 @@ VkShaderModule slb_CreateShaderModule(slb_Device* device, char* buffer, uint32_t
     return shaderModule;
 }
 
-slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
-        slb_RenderPass renderPass,
-        const char* vsPath, const char* fsPath, 
-        VkVertexInputBindingDescription* bindingDescription, 
-        VkVertexInputAttributeDescription* attributeDescriptions, 
-        uint32_t attributeDescriptionCount,
-        slb_DescriptorSetLayout* layouts, uint32_t layoutCount)
+slb_Pipeline slb_Pipeline_Create(
+    slb_Device* device, slb_Swapchain* swapchain,
+    slb_RenderPass renderPass, const char* vsPath, const char* fsPath,
+    VkVertexInputBindingDescription*   bindingDescription,
+    VkVertexInputAttributeDescription* attributeDescriptions,
+    uint32_t                           attributeDescriptionCount,
+    slb_DescriptorSetLayout* layouts, uint32_t layoutCount,
+    VkPrimitiveTopology topology)
 {
     slb_Pipeline pipeline;
 
     uint32_t vertLen, fragLen;
-    char* vertShaderCode = skReadFile(vsPath, &vertLen);
-    char* fragShaderCode = skReadFile(fsPath, &fragLen);
+    char*    vertShaderCode = skReadFile(vsPath, &vertLen);
+    char*    fragShaderCode = skReadFile(fsPath, &fragLen);
 
     VkShaderModule vertMod =
         slb_CreateShaderModule(device, vertShaderCode, vertLen);
@@ -956,25 +991,26 @@ slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
     vertexInputInfo.sType =
         VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = 1;
-    vertexInputInfo.vertexAttributeDescriptionCount = 
+    vertexInputInfo.vertexAttributeDescriptionCount =
         attributeDescriptionCount;
     vertexInputInfo.pVertexAttributeDescriptions =
         attributeDescriptions;
     vertexInputInfo.pVertexBindingDescriptions = bindingDescription;
 
-    VkDynamicState dynamicStates[2] = {VK_DYNAMIC_STATE_VIEWPORT,
-                                       VK_DYNAMIC_STATE_SCISSOR};
+    VkDynamicState dynamicStates[3] = {VK_DYNAMIC_STATE_VIEWPORT,
+                                       VK_DYNAMIC_STATE_SCISSOR,
+                                       VK_DYNAMIC_STATE_LINE_WIDTH};
 
     VkPipelineDynamicStateCreateInfo dynamicState = {0};
     dynamicState.sType =
         VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicState.dynamicStateCount = 2;
+    dynamicState.dynamicStateCount = 3;
     dynamicState.pDynamicStates = dynamicStates;
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = {0};
     inputAssembly.sType =
         VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    inputAssembly.topology = topology;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
 
     VkViewport viewport = {0};
@@ -1023,7 +1059,6 @@ slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
     colorBlendAttachment.colorWriteMask =
         VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
         VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-
     colorBlendAttachment.blendEnable = VK_TRUE;
     colorBlendAttachment.srcColorBlendFactor =
         VK_BLEND_FACTOR_SRC_ALPHA;
@@ -1055,10 +1090,10 @@ slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
     pipelineLayoutInfo.pPushConstantRanges = NULL;
 
     if (vkCreatePipelineLayout(device->device, &pipelineLayoutInfo,
-                               NULL, &pipeline.layout) !=
-        VK_SUCCESS)
+                               NULL, &pipeline.layout) != VK_SUCCESS)
     {
-        slb_Error("Failed to create pipeline layout", slb_ErrorType_Error);
+        slb_Error("Failed to create pipeline layout",
+                  slb_ErrorType_Error);
     }
 
     VkGraphicsPipelineCreateInfo pipelineInfo = {0};
@@ -1108,8 +1143,9 @@ slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
     return pipeline;
 }
 
-uint32_t slb_FindMemoryType(slb_PhysicalDevice physicalDevice, uint32_t typeFilter,
-                              VkMemoryPropertyFlags properties)
+uint32_t slb_FindMemoryType(slb_PhysicalDevice    physicalDevice,
+                            uint32_t              typeFilter,
+                            VkMemoryPropertyFlags properties)
 {
     VkPhysicalDeviceMemoryProperties memProperties;
     vkGetPhysicalDeviceMemoryProperties(physicalDevice,
@@ -1125,17 +1161,17 @@ uint32_t slb_FindMemoryType(slb_PhysicalDevice physicalDevice, uint32_t typeFilt
         }
     }
 
-    slb_Error("Failed to find suitable memory type", slb_ErrorType_Warning);
+    slb_Error("Failed to find suitable memory type",
+              slb_ErrorType_Warning);
     return -1;
 }
 
-slb_Image slb_Image_Create(slb_Device* device, 
-        slb_PhysicalDevice physicalDevice, 
-        uint32_t width,
-        uint32_t height, VkFormat format,
-        VkImageTiling         tiling,
-        VkImageUsageFlags     usage,
-        VkMemoryPropertyFlags properties)
+slb_Image slb_Image_Create(slb_Device*        device,
+                           slb_PhysicalDevice physicalDevice,
+                           uint32_t width, uint32_t height,
+                           VkFormat format, VkImageTiling tiling,
+                           VkImageUsageFlags     usage,
+                           VkMemoryPropertyFlags properties)
 {
     slb_Image image;
 
@@ -1154,8 +1190,8 @@ slb_Image slb_Image_Create(slb_Device* device,
     imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    if (vkCreateImage(device->device, &imageInfo, NULL, &image.image) !=
-        VK_SUCCESS)
+    if (vkCreateImage(device->device, &imageInfo, NULL,
+                      &image.image) != VK_SUCCESS)
     {
         slb_Error("Failed to create image", slb_ErrorType_Warning);
     }
@@ -1167,13 +1203,14 @@ slb_Image slb_Image_Create(slb_Device* device,
     VkMemoryAllocateInfo allocInfo = {0};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = slb_FindMemoryType(physicalDevice,
-            memRequirements.memoryTypeBits, properties);
+    allocInfo.memoryTypeIndex = slb_FindMemoryType(
+        physicalDevice, memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device->device, &allocInfo, NULL,
                          &image.memory) != VK_SUCCESS)
     {
-        slb_Error("Failed to allocate image memory", slb_ErrorType_Warning);
+        slb_Error("Failed to allocate image memory",
+                  slb_ErrorType_Warning);
     }
 
     vkBindImageMemory(device->device, image.image, image.memory, 0);
@@ -1181,9 +1218,9 @@ slb_Image slb_Image_Create(slb_Device* device,
     return image;
 }
 
-VkImageView slb_ImageView_Create(slb_Device* device,
-    VkImage image, VkFormat format,
-    VkImageAspectFlags flags)
+VkImageView slb_ImageView_Create(slb_Device* device, VkImage image,
+                                 VkFormat           format,
+                                 VkImageAspectFlags flags)
 {
     VkImageViewCreateInfo viewInfo = {0};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -1200,19 +1237,21 @@ VkImageView slb_ImageView_Create(slb_Device* device,
     if (vkCreateImageView(device->device, &viewInfo, NULL,
                           &imageView) != VK_SUCCESS)
     {
-        slb_Error("Failed to create image view for image", slb_ErrorType_Warning);
+        slb_Error("Failed to create image view for image",
+                  slb_ErrorType_Warning);
     }
 
     return imageView;
 }
 
-slb_CommandPool slb_CommandPool_Create(slb_PhysicalDevice physicalDevice, slb_Device* device, 
-        slb_Surface surface)
+slb_CommandPool
+slb_CommandPool_Create(slb_PhysicalDevice physicalDevice,
+                       slb_Device* device, slb_Surface surface)
 {
     slb_CommandPool commandPool;
 
-    slb_QueueFamilyIndices indices = slb_FindQueueFamilies(
-        physicalDevice, surface);
+    slb_QueueFamilyIndices indices =
+        slb_FindQueueFamilies(physicalDevice, surface);
 
     VkCommandPoolCreateInfo poolInfo = {0};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -1222,7 +1261,8 @@ slb_CommandPool slb_CommandPool_Create(slb_PhysicalDevice physicalDevice, slb_De
     if (vkCreateCommandPool(device->device, &poolInfo, NULL,
                             &commandPool.commandPool) != VK_SUCCESS)
     {
-        slb_Error("Failed to create command pool", slb_ErrorType_Error);
+        slb_Error("Failed to create command pool",
+                  slb_ErrorType_Error);
     }
 
     VkCommandBufferAllocateInfo allocInfo = {0};
@@ -1236,14 +1276,17 @@ slb_CommandPool slb_CommandPool_Create(slb_PhysicalDevice physicalDevice, slb_De
             (VkCommandBuffer*)commandPool.commandBuffers) !=
         VK_SUCCESS)
     {
-        slb_Error("Failed to allocate command buffers", slb_ErrorType_Error);
+        slb_Error("Failed to allocate command buffers",
+                  slb_ErrorType_Error);
     }
 
     return commandPool;
 }
 
-slb_DescriptorPool slb_DescriptorPool_Create(VkDescriptorPoolSize* poolSizes, 
-        int numPoolSizes, int maxSets, slb_Device* device)
+slb_DescriptorPool
+slb_DescriptorPool_Create(VkDescriptorPoolSize* poolSizes,
+                          int numPoolSizes, int maxSets,
+                          slb_Device* device)
 {
     slb_DescriptorPool pool;
 
@@ -1256,17 +1299,20 @@ slb_DescriptorPool slb_DescriptorPool_Create(VkDescriptorPoolSize* poolSizes,
     poolInfo.maxSets = maxSets;
 
     if (vkCreateDescriptorPool(device->device, &poolInfo, NULL,
-                               &pool) !=
-        VK_SUCCESS)
+                               &pool) != VK_SUCCESS)
     {
-        slb_Error("Failed to create descriptor pool", slb_ErrorType_Error);
+        slb_Error("Failed to create descriptor pool",
+                  slb_ErrorType_Error);
     }
 
     return pool;
 }
 
-void slb_TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, 
-        VkImageLayout newLayout, slb_Device* device, slb_CommandPool* commandPool)
+void slb_TransitionImageLayout(VkImage image, VkFormat format,
+                               VkImageLayout    oldLayout,
+                               VkImageLayout    newLayout,
+                               slb_Device*      device,
+                               slb_CommandPool* commandPool)
 {
     VkCommandBufferAllocateInfo allocInfo = {0};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -1275,7 +1321,8 @@ void slb_TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout old
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device->device, &allocInfo, &commandBuffer);
+    vkAllocateCommandBuffers(device->device, &allocInfo,
+                             &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo = {0};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1299,31 +1346,32 @@ void slb_TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout old
     VkPipelineStageFlags sourceStage;
     VkPipelineStageFlags destinationStage;
 
-    if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && 
-        newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) 
+    if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+        newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
     {
         barrier.srcAccessMask = 0;
         barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
         sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
         destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-    } 
+    }
     else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
-             newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) 
+             newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     {
         barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
         sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
         destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    } 
+    }
     else
     {
-        slb_Error("Unsupported layout transition", slb_ErrorType_Error);
+        slb_Error("Unsupported layout transition",
+                  slb_ErrorType_Error);
     }
 
-    vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 
-            0, 0, NULL, 0, NULL, 1, &barrier);
+    vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage,
+                         0, 0, NULL, 0, NULL, 1, &barrier);
 
     vkEndCommandBuffer(commandBuffer);
 
@@ -1332,14 +1380,18 @@ void slb_TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout old
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
 
-    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo,
+                  VK_NULL_HANDLE);
     vkQueueWaitIdle(device->graphicsQueue);
 
-    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1,
+                         &commandBuffer);
 }
 
-void slb_CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height,
-        slb_Device* device, slb_CommandPool* commandPool)
+void slb_CopyBufferToImage(VkBuffer buffer, VkImage image,
+                           uint32_t width, uint32_t height,
+                           slb_Device*      device,
+                           slb_CommandPool* commandPool)
 {
     VkCommandBufferAllocateInfo allocInfo = {0};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -1348,7 +1400,8 @@ void slb_CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint3
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device->device, &allocInfo, &commandBuffer);
+    vkAllocateCommandBuffers(device->device, &allocInfo,
+                             &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo = {0};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1364,10 +1417,12 @@ void slb_CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint3
     region.imageSubresource.mipLevel = 0;
     region.imageSubresource.baseArrayLayer = 0;
     region.imageSubresource.layerCount = 1;
-    region.imageOffset = (VkOffset3D){0, 0, 0};
-    region.imageExtent = (VkExtent3D){width, height, 1};
+    region.imageOffset = (VkOffset3D) {0, 0, 0};
+    region.imageExtent = (VkExtent3D) {width, height, 1};
 
-    vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+    vkCmdCopyBufferToImage(commandBuffer, buffer, image,
+                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                           &region);
 
     vkEndCommandBuffer(commandBuffer);
 
@@ -1376,19 +1431,23 @@ void slb_CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint3
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
 
-    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueSubmit(device->graphicsQueue, 1, &submitInfo,
+                  VK_NULL_HANDLE);
     vkQueueWaitIdle(device->graphicsQueue);
 
-    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(device->device, commandPool->commandPool, 1,
+                         &commandBuffer);
 }
 
-slb_Sampler slb_Sampler_Create(VkFilter magFilter, VkFilter minFilter, 
-        bool anistoropyEnable, float maxAnisotropy, bool unnormalizedCoordinates, 
-        bool compareEnable, VkCompareOp compareOp, VkSamplerMipmapMode mipmapMode,
-        slb_Device* device)
+slb_Sampler
+slb_Sampler_Create(VkFilter magFilter, VkFilter minFilter,
+                   bool anistoropyEnable, float maxAnisotropy,
+                   bool unnormalizedCoordinates, bool compareEnable,
+                   VkCompareOp         compareOp,
+                   VkSamplerMipmapMode mipmapMode, slb_Device* device)
 {
     slb_Sampler sampler;
-    
+
     VkSamplerCreateInfo samplerInfo = {0};
     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     samplerInfo.magFilter = magFilter;

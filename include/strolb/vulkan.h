@@ -113,13 +113,14 @@ typedef struct
     VkPipelineLayout layout;
 } slb_Pipeline;
 
-slb_Pipeline slb_Pipeline_Create(slb_Device* device, slb_Swapchain* swapchain,
-        slb_RenderPass renderPass,
-        const char* vsPath, const char* fsPath, 
-        VkVertexInputBindingDescription* bindingDescription, 
-        VkVertexInputAttributeDescription* attributeDescriptions, 
-        uint32_t attributeDescriptionCount,
-        slb_DescriptorSetLayout* layouts, uint32_t layoutCount);
+slb_Pipeline slb_Pipeline_Create(
+    slb_Device* device, slb_Swapchain* swapchain,
+    slb_RenderPass renderPass, const char* vsPath, const char* fsPath,
+    VkVertexInputBindingDescription*   bindingDescription,
+    VkVertexInputAttributeDescription* attributeDescriptions,
+    uint32_t                           attributeDescriptionCount,
+    slb_DescriptorSetLayout* layouts, uint32_t layoutCount,
+    VkPrimitiveTopology topology);
 
 slb_CommandPool slb_CommandPool_Create(slb_PhysicalDevice physicalDevice, 
         slb_Device* device,

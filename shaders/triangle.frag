@@ -6,6 +6,13 @@ layout(location = 0) in vec2 fragTexCoord;
 
 layout(location = 0) out vec4 outColor;
 
-void main() {
+void main() 
+{
     outColor = texture(texSampler, fragTexCoord);
+    outColor.rgb = pow(outColor.rgb, vec3(1.0/2.2));
+
+    if (outColor.w < 0.8)
+    {
+        discard;
+    }
 }
