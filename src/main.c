@@ -733,6 +733,124 @@ void DestroyRenderObject(RenderObject* obj, slb_Device* device)
     }
 }
 
+void CreateDialogueBoxAtIndex(
+    const char* textOriginal, vec2 pos, float textScale,
+    slb_Vector* renderObjects, slb_Vector* textObjects,
+    slb_Vector* dialogueBoxes, int insertIndex,
+    slb_PhysicalDevice physicalDevice, slb_Device* device,
+    slb_CommandPool*        commandPool,
+    slb_DescriptorSetLayout descriptorSetLayout,
+    slb_DescriptorPool      descriptorPool)
+{
+    char text[1024];
+
+    char buffer[1024];
+    strcpy(buffer, textOriginal);
+    
+    // Count lines and store pointers
+    char* lines[100];
+    int line_count = 0;
+    
+    char* token = strtok(buffer, "\n");
+    while (token != NULL && line_count < 100) {
+        lines[line_count++] = token;
+        token = strtok(NULL, "\n");
+    }
+    
+    // Build reversed string
+    text[0] = '\0';
+    for (int i = line_count - 1; i >= 0; i--) {
+        strcat(text, lines[i]);
+        if (i > 0) {
+            strcat(text, "\n");
+        }
+    }
+
+    DialogueBox box = {};
+    strcpy(box.text, textOriginal);
+
+    // Calculate box dimensions (same as before)
+    const char* delimiter = "\n";
+    char*       textCopy = strdup(text);
+    char*       line = strtok(textCopy, delimiter);
+    int         lineCount = 0;
+    float       maxLineWidth = 0.0f;
+
+    while (line != NULL)
+    {
+        lineCount++;
+        float lineWidth = 0.0f;
+        for (int i = 0; i < strlen(line); i++)
+        {
+            Character ch = characters[(int)line[i]];
+            lineWidth += ch.ax * textScale;
+        }
+        if (lineWidth > maxLineWidth)
+        {
+            maxLineWidth = lineWidth;
+        }
+        line = strtok(NULL, delimiter);
+    }
+    free(textCopy);
+
+    const float padding = 0.4f;
+    float       boxWidth = maxLineWidth + 2 * padding;
+    float       boxHeight =
+        (characters['A'].bh * textScale * lineCount) + 2 * padding;
+
+    RenderObject boxObj = CreateRenderObject(
+        "res/textures/grey.png", (vec2) {pos[0], pos[1]},
+        (vec2) {boxWidth, boxHeight}, physicalDevice, device,
+        commandPool, descriptorSetLayout, descriptorPool);
+
+    slb_Vector_Insert(renderObjects, insertIndex + 1, &boxObj);
+
+    textCopy = strdup(text);
+    line = strtok(textCopy, delimiter);
+    float yOffset = padding;
+    int   textInsertIndex = 0;
+
+    // Calculate where to insert text objects
+    for (int i = 0; i < insertIndex; i++)
+    {
+        DialogueBox* prevBox = slb_Vector_Get(dialogueBoxes, i);
+        textInsertIndex += prevBox->numTextObjects;
+    }
+
+    printf("InsertIndex: %d\n", insertIndex);
+
+    box.beginningTextIndex = textInsertIndex;
+    box.numTextObjects = lineCount;
+
+    for (int i = 0; i < lineCount; i++)
+    {
+        vec2 textPos = {pos[0] - boxWidth / 2 + padding,
+                        pos[1] - boxHeight / 2 + yOffset};
+
+        TextObject textObj = CreateTextObject(
+            line, textPos, (vec3) {0.0f, 0.0f, 0.0f}, textScale,
+            physicalDevice, device, commandPool, descriptorSetLayout,
+            descriptorPool);
+
+        slb_Vector_Insert(textObjects, textInsertIndex + i, &textObj);
+
+        yOffset += characters['A'].bh * textScale * 1.2f;
+        line = strtok(NULL, delimiter);
+    }
+    free(textCopy);
+
+    // Update text indices for dialogue boxes that come after this one
+    for (int i = insertIndex; i < dialogueBoxes->size; i++)
+    {
+        DialogueBox* laterBox = slb_Vector_Get(dialogueBoxes, i);
+        laterBox->beginningTextIndex += lineCount;
+    }
+
+    box.connections = slb_Vector_Create(sizeof(int), 1);
+
+    slb_Vector_Insert(dialogueBoxes, insertIndex, &box);
+}
+
 void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
                        slb_Vector*             textObjects,
                        slb_Vector*             dialogueBoxes,
@@ -743,9 +861,8 @@ void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
                        slb_DescriptorSetLayout descriptorSetLayout,
                        slb_DescriptorPool      descriptorPool)
 {
-    DialogueBox*  box = slb_Vector_Get(dialogueBoxes, dialogueIndex);
-    RenderObject* obj =
-        slb_Vector_Get(renderObjects, dialogueIndex + 1);
+    DialogueBox* box = slb_Vector_Get(dialogueBoxes, dialogueIndex);
+    RenderObject* obj = slb_Vector_Get(renderObjects, dialogueIndex + 1);
 
     // Store the data we need before cleanup
     char text[1024];
@@ -763,6 +880,9 @@ void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
         slb_Vector_PushBack(tempConnections, connection);
     }
 
+    // Store the old number of text objects BEFORE cleanup
+    int oldNumTextObjects = box->numTextObjects;
+
     // Clean up old text objects
     for (int i = box->beginningTextIndex;
          i < box->numTextObjects + box->beginningTextIndex; i++)
@@ -771,22 +891,28 @@ void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
         DestroyTextObject(textObj, device);
     }
 
-    // Clean up old render object
-    DestroyRenderObject(obj, device);
-
-    // Remove old elements (from highest index to lowest to avoid
-    // shifting issues)
+    // Remove old elements (from highest index to lowest to avoid shifting issues)
     for (int i = box->numTextObjects + box->beginningTextIndex - 1;
          i >= box->beginningTextIndex; i--)
     {
         slb_Vector_Remove(textObjects, i);
     }
 
+    // Clean up old render object
+    DestroyRenderObject(obj, device);
     slb_Vector_Remove(renderObjects, dialogueIndex + 1);
 
     // Free the old dialogue box connections
     slb_Vector_Free(box->connections);
     slb_Vector_Remove(dialogueBoxes, dialogueIndex);
+
+    // Update text indices for dialogue boxes that come after this one
+    // This must be done BEFORE creating the new dialogue box
+    for (int i = dialogueIndex; i < dialogueBoxes->size; i++)
+    {
+        DialogueBox* laterBox = slb_Vector_Get(dialogueBoxes, i);
+        laterBox->beginningTextIndex -= oldNumTextObjects;
+    }
 
     // Create new dialogue box at the same index
     CreateDialogueBoxAtIndex(
@@ -795,8 +921,7 @@ void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
         descriptorSetLayout, descriptorPool);
 
     // Restore event and connections
-    DialogueBox* newBox =
-        slb_Vector_Get(dialogueBoxes, dialogueIndex);
+    DialogueBox* newBox = slb_Vector_Get(dialogueBoxes, dialogueIndex);
     strcpy(newBox->event, event);
 
     // Restore connections
@@ -808,8 +933,7 @@ void UpdateDialogueBox(int dialogueIndex, slb_Vector* renderObjects,
 
     slb_Vector_Free(tempConnections);
 
-    currentDialogueBox =
-        dialogueIndex + 1; // +1 for render object index
+    currentDialogueBox = dialogueIndex + 1; // +1 for render object index
 }
 
 LineObject CreateLineObject(vec3 startPos, vec3 endPos, vec3 color,
@@ -945,101 +1069,6 @@ LineObject CreateLineObject(vec3 startPos, vec3 endPos, vec3 color,
     return lineObj;
 }
 
-void CreateDialogueBoxAtIndex(
-    const char* text, vec2 pos, float textScale,
-    slb_Vector* renderObjects, slb_Vector* textObjects,
-    slb_Vector* dialogueBoxes, int insertIndex,
-    slb_PhysicalDevice physicalDevice, slb_Device* device,
-    slb_CommandPool*        commandPool,
-    slb_DescriptorSetLayout descriptorSetLayout,
-    slb_DescriptorPool      descriptorPool)
-{
-    DialogueBox box = {};
-    strcpy(box.text, text);
-
-    // Calculate box dimensions (same as before)
-    const char* delimiter = "\n";
-    char*       textCopy = strdup(text);
-    char*       line = strtok(textCopy, delimiter);
-    int         lineCount = 0;
-    float       maxLineWidth = 0.0f;
-
-    while (line != NULL)
-    {
-        lineCount++;
-        float lineWidth = 0.0f;
-        for (int i = 0; i < strlen(line); i++)
-        {
-            Character ch = characters[(int)line[i]];
-            lineWidth += ch.ax * textScale;
-        }
-        if (lineWidth > maxLineWidth)
-        {
-            maxLineWidth = lineWidth;
-        }
-        line = strtok(NULL, delimiter);
-    }
-    free(textCopy);
-
-    const float padding = 0.4f;
-    float       boxWidth = maxLineWidth + 2 * padding;
-    float       boxHeight =
-        (characters['A'].bh * textScale * lineCount) + 2 * padding;
-
-    // Create render object
-    RenderObject boxObj = CreateRenderObject(
-        "res/textures/grey.png", (vec2) {pos[0], pos[1]},
-        (vec2) {boxWidth, boxHeight}, physicalDevice, device,
-        commandPool, descriptorSetLayout, descriptorPool);
-
-    // Insert render object at specific index
-    slb_Vector_Insert(renderObjects, insertIndex + 1, &boxObj);
-
-    // Create text objects and insert them
-    textCopy = strdup(text);
-    line = strtok(textCopy, delimiter);
-    float yOffset = padding;
-    int   textInsertIndex = 0;
-
-    // Calculate where to insert text objects
-    for (int i = 0; i < insertIndex; i++)
-    {
-        DialogueBox* prevBox = slb_Vector_Get(dialogueBoxes, i);
-        textInsertIndex += prevBox->numTextObjects;
-    }
-
-    box.beginningTextIndex = textInsertIndex;
-    box.numTextObjects = lineCount;
-
-    for (int i = 0; i < lineCount; i++)
-    {
-        vec2 textPos = {pos[0] - boxWidth / 2 + padding,
-                        pos[1] - boxHeight / 2 + yOffset};
-
-        TextObject textObj = CreateTextObject(
-            line, textPos, (vec3) {0.0f, 0.0f, 0.0f}, textScale,
-            physicalDevice, device, commandPool, descriptorSetLayout,
-            descriptorPool);
-
-        slb_Vector_Insert(textObjects, textInsertIndex + i, &textObj);
-
-        yOffset += characters['A'].bh * textScale * 1.2f;
-        line = strtok(NULL, delimiter);
-    }
-    free(textCopy);
-
-    // Update text indices for dialogue boxes that come after this one
-    for (int i = insertIndex; i < dialogueBoxes->size; i++)
-    {
-        DialogueBox* laterBox = slb_Vector_Get(dialogueBoxes, i);
-        laterBox->beginningTextIndex += lineCount;
-    }
-
-    box.connections = slb_Vector_Create(sizeof(int), 1);
-
-    // Insert dialogue box at specific index
-    slb_Vector_Insert(dialogueBoxes, insertIndex, &box);
-}
 
 void CreateDialogueBox(const char* text, vec2 pos, float textScale,
                        slb_Vector*             renderObjects,
@@ -1244,13 +1273,14 @@ DialogueBox*  currentDialogueBoxObject;
 int  firstConnectionDialogueBox = -1;
 int  secondConnectionDialogueBox = -1;
 bool isConnecting = false;
-            
+
 bool preferencesWindow = false;
+bool manualWindow = false;
 
 int main(int argc, char** argv)
 {
     slb_Window window =
-        slb_Window_Create("Slug's Window", 1600, 900, false, true);
+        slb_Window_Create("Diagmaker", 1600, 900, false, true);
 
     slb_Camera camera = slb_Camera_Create((vec3) {0.0f, 5.0f, 0.0f},
                                           (vec3) {0.0f, 0.0f, 1.0f},
@@ -1458,6 +1488,161 @@ int main(int argc, char** argv)
         // DIALOUGE BOX SYSTEM
         // ---
 
+        if (slb_Input_GetKeyDown(&window, SLB_KEY_DELETE))
+        {
+            // DELETE THE SELECTED DIALOGUE BOX
+            if (currentDialogueBox != -1 &&
+                currentDialogueBox != 0) // Don't delete cursor
+            {
+                int dialogueIndex =
+                    currentDialogueBox -
+                    1; // Convert to dialogue box index
+                DialogueBox* boxToDelete =
+                    slb_Vector_Get(dialogueBoxes, dialogueIndex);
+                RenderObject* objToDelete =
+                    slb_Vector_Get(renderObjects, currentDialogueBox);
+
+                // Clean up text objects associated with this dialogue
+                // box
+                for (int i = boxToDelete->beginningTextIndex;
+                     i < boxToDelete->numTextObjects +
+                             boxToDelete->beginningTextIndex;
+                     i++)
+                {
+                    TextObject* textObj =
+                        slb_Vector_Get(textObjects, i);
+                    DestroyTextObject(textObj, &device);
+                }
+
+                // Clean up render object
+                DestroyRenderObject(objToDelete, &device);
+
+                // Remove associated line objects that connect to or
+                // from this dialogue box
+                for (int i = lineObjects->size - 1; i >= 0; i--)
+                {
+                    LineObject* line = slb_Vector_Get(lineObjects, i);
+
+                    if (line->firstBoxIndex == dialogueIndex ||
+                        line->secondBoxIndex == dialogueIndex)
+                    {
+                        // Clean up line resources
+                        vkDestroyBuffer(device.device,
+                                        line->vertexBuffer.buffer,
+                                        NULL);
+                        vkFreeMemory(device.device,
+                                     line->vertexBuffer.memory, NULL);
+
+                        for (size_t j = 0; j < SLB_FRAMES_IN_FLIGHT;
+                             j++)
+                        {
+                            vkUnmapMemory(
+                                device.device,
+                                line->descriptorSet.buffers[j]
+                                    .memory);
+                            vkDestroyBuffer(
+                                device.device,
+                                line->descriptorSet.buffers[j].buffer,
+                                NULL);
+                            vkFreeMemory(
+                                device.device,
+                                line->descriptorSet.buffers[j].memory,
+                                NULL);
+                        }
+
+                        slb_Vector_Remove(lineObjects, i);
+                    }
+                }
+
+                // Update line indices for remaining lines (shift down
+                // indices that are higher than deleted box)
+                for (int i = 0; i < lineObjects->size; i++)
+                {
+                    LineObject* line = slb_Vector_Get(lineObjects, i);
+
+                    if (line->firstBoxIndex > dialogueIndex)
+                        line->firstBoxIndex--;
+                    if (line->secondBoxIndex > dialogueIndex)
+                        line->secondBoxIndex--;
+                }
+
+                // Remove connections from other dialogue boxes that
+                // point to this one
+                for (int i = 0; i < dialogueBoxes->size; i++)
+                {
+                    if (i != dialogueIndex)
+                    {
+                        DialogueBox* box =
+                            slb_Vector_Get(dialogueBoxes, i);
+
+                        for (int j = box->connections->size - 1;
+                             j >= 0; j--)
+                        {
+                            int* connection =
+                                slb_Vector_Get(box->connections, j);
+
+                            // Remove connection if it points to
+                            // deleted box
+                            if (*connection == currentDialogueBox)
+                            {
+                                slb_Vector_Remove(box->connections,
+                                                  j);
+                            }
+                            // Update connection indices that are
+                            // higher than deleted box
+                            else if (*connection > currentDialogueBox)
+                            {
+                                (*connection)--;
+                            }
+                        }
+                    }
+                }
+
+                // Remove text objects (from highest index to lowest
+                // to avoid shifting issues)
+                for (int i = boxToDelete->numTextObjects +
+                             boxToDelete->beginningTextIndex - 1;
+                     i >= boxToDelete->beginningTextIndex; i--)
+                {
+                    slb_Vector_Remove(textObjects, i);
+                }
+
+                // Update text indices for dialogue boxes that come
+                // after this one
+                for (int i = dialogueIndex + 1;
+                     i < dialogueBoxes->size; i++)
+                {
+                    DialogueBox* laterBox =
+                        slb_Vector_Get(dialogueBoxes, i);
+                    laterBox->beginningTextIndex -=
+                        boxToDelete->numTextObjects;
+                }
+
+                // Remove render object
+                slb_Vector_Remove(renderObjects, currentDialogueBox);
+
+                // Free dialogue box connections and remove dialogue
+                // box
+                slb_Vector_Free(boxToDelete->connections);
+                slb_Vector_Remove(dialogueBoxes, dialogueIndex);
+
+                // Reset current selection
+                currentDialogueBox = -1;
+                currentDialogueBoxObject = NULL;
+                currentRenderObject = NULL;
+                isDragging = false;
+
+                // If we were in the middle of connecting, reset that
+                // too
+                if (isConnecting && (firstConnectionDialogueBox ==
+                                     currentDialogueBox))
+                {
+                    isConnecting = false;
+                    firstConnectionDialogueBox = -1;
+                }
+            }
+        }
+
         for (int i = 1; i < renderObjects->size; i++)
         {
             RenderObject* obj = slb_Vector_Get(renderObjects, i);
@@ -1469,7 +1654,8 @@ int main(int argc, char** argv)
                 cursorPosition[2] >=
                     obj->position[1] - obj->scale[1] / 2 &&
                 cursorPosition[2] <=
-                    obj->position[1] + obj->scale[1] / 2 && !mouseOverGui)
+                    obj->position[1] + obj->scale[1] / 2 &&
+                !mouseOverGui)
             {
                 if (slb_Input_GetMouseButtonDown(
                         &window, SLB_MOUSE_BUTTON_LEFT))
@@ -1593,7 +1779,8 @@ int main(int argc, char** argv)
         // ---
 
         if (slb_Input_GetMouseButtonDown(&window,
-                                         SLB_MOUSE_BUTTON_MIDDLE) && !mouseOverGui)
+                                         SLB_MOUSE_BUTTON_MIDDLE) &&
+            !mouseOverGui)
         {
             CreateDialogueBox(
                 "Hello world",
@@ -1936,12 +2123,12 @@ int main(int argc, char** argv)
 
                 slb_ImGui_EndMenu();
             }
-  
-            if (slb_ImGui_BeginMenu("Edit"))
+
+            if (slb_ImGui_BeginMenu("Help"))
             {
-                if (slb_ImGui_MenuItem("Preferences"))
+                if (slb_ImGui_MenuItem("Manual"))
                 {
-                    preferencesWindow = true;
+                    manualWindow = true;
                 }
 
                 slb_ImGui_EndMenu();
@@ -1950,9 +2137,27 @@ int main(int argc, char** argv)
             slb_ImGui_EndMainMenuBar();
         }
 
-        if (preferencesWindow)
+        if (manualWindow)
         {
-            slb_ImGui_BeginFlag("Preferences", &preferencesWindow);
+            slb_ImGui_BeginFlag("Manual", &manualWindow);
+
+            slb_ImGui_TextLong(
+                "DIAGMAKER MANUAL:\n\nDiagmaker is an application "
+                "which allows you make dialogue trees. \nYou can "
+                "make "
+                "a dialogue node by pressing middle click, \nyou can "
+                "move these nodes around by dragging them with left "
+                "click. \nYou can connect these nodes up to one "
+                "another by pressing a node with right click,\nand "
+                "then pressing right click on the one you want to "
+                "connect it to.\nIf you left click a node, you will "
+                "select it and will be able to see it in the "
+                "inspector. \nEach node has two properties, text and "
+                "an event. \nYou can modify both within the "
+                "inspector.\n"
+                "The event is not shown in the program but only in "
+                "the inspector.\nIf you want to delete a node, then "
+                "select it and press delete.");
 
             slb_ImGui_End();
         }
